@@ -6,14 +6,14 @@ string
 """
 
 import json
-from datetime import datetime
+from . import BaseModel
 
 
 class FileStorage:
     """
-    Serilaizes instance to JSON file and deserializes 
+    Serilaizes instance to JSON file and deserializes
     JSON files to instances.
-    
+
     Private class attributes:
         @__file_path: string - path to the JSON file (ex: file.json)
         @__objects: dictionary - empty but will store all objects by <class name>.id (ex: to store a BaseModel object with id=12121212, the key will be BaseModel.12121212)
@@ -32,7 +32,7 @@ class FileStorage:
         pass
 
     def all(self):
-        """ 
+        """
         Returns the __objects
         """
 
@@ -41,7 +41,7 @@ class FileStorage:
     def new(self, obj):
         """
         Adds the new object to the __objects var
-        
+
         Args
             @obj: the object to be added
         """
@@ -56,7 +56,7 @@ class FileStorage:
 
         obj_dict = {
             key: value.to_dict()
-            for key, value in FileStorage.__object.items()
+            for key, value in FileStorage.__objects.items()
         }
         with open(FileStorage.__file_path, "w") as json_file:
             json.dump(obj_dict, json_file)
@@ -65,7 +65,7 @@ class FileStorage:
         """
             deserializes the JSON file to __objects
             (only if the JSON file (__file_path) exists ;
-            otherwise, do nothing. If the file doesn’t exist, 
+            otherwise, do nothing. If the file doesn’t exist,
             no exception is raised)
         """
 
