@@ -41,7 +41,7 @@ class BaseModel:
         Returns the string representation of this class
         """
 
-        return "{} ({}) {}".format(self.__class__, self.id, self.__dict__)
+        return "{} ({}) {}".format(self.__class__.__name__, self.id, self.__dict__)
 
     def save(self):
         """
@@ -49,19 +49,19 @@ class BaseModel:
         """
         self.updated_at = datetime.now()
 
-    def to_obj(self):
+    def to_dict(self):
         """
             return the dictionary representation of the object
             as stated above
         """
 
         obj_repr = {}
-        for key, value in enumerate(self.__dict__):
+        for key, value in self.__dict__.items():
             if key == "created_at" or key == "updated_at":
                 obj_repr[key] = value.isoformat()
             else:
                 obj_repr[key] = value
 
-        obj_repr["__class__"] = self.__class__
+        obj_repr["__class__"] = self.__class__.__name__
 
         return obj_repr
