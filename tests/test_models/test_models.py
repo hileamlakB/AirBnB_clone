@@ -320,8 +320,8 @@ class TestBaseKwargs(unittest.TestCase):
         self.assertIsInstance(self.cls2.updated_at, datetime)
         self.assertIsInstance(self.cls3.updated_at, datetime)
 
-        self.assertRaises(TypeError, BaseModel(updated_at="Wrong_format"))
-        self.assertRaises(TypeError, BaseModel(created_at="Wrong_format"))
+        self.assertRaises(ValueError, BaseModel, updated_at="Wrong_format")
+        self.assertRaises(ValueError, BaseModel, created_at="Wrong_format")
 
     def test_time(self):
         """
@@ -329,11 +329,12 @@ class TestBaseKwargs(unittest.TestCase):
         public attributes
         """
 
+        TIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%f"
         # Tests if the updated time is also set coorrectl set
-        self.assertDateTimeAlmostEqual(self.some_time, self.cls2.updated_at)
+        self.assertDateTimeAlmostEqual(datetime.strptime(self.some_time, TIME_FORMAT), self.cls2.updated_at)
 
         # Test if the class created_at is around the correct time
-        self.assertDateTimeAlmostEqual(self.some_time, self.cls1.created_at)
+        self.assertDateTimeAlmostEqual(datetime.strptime(self.some_time, TIME_FORMAT), self.cls3.created_at)
 
     def test_to_dict_keys(self):
         """
