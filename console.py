@@ -34,12 +34,12 @@ class HBNBCommand(cmd.Cmd):
     }
 
     @staticmethod
-    def parse(arg):
+    def parse(arg, id=" "):
         """
         Returns a list conatning the parsed arguments from the string
         """
 
-        arg_list = arg.split(" ")
+        arg_list = arg.split(id)
         narg_list = []
 
         for x in arg_list:
@@ -49,6 +49,14 @@ class HBNBCommand(cmd.Cmd):
 
     def __init__(self):
         super().__init__('tab')
+
+        self.__class_funcs = {
+            "all": self.do_all,
+            "count": self.count,
+            "show": self.show,
+            "destroy": self.destroy,
+            "update": self.update
+        }
 
     def do_quit(self, arg):
         """Exits the program"""
@@ -239,8 +247,7 @@ class HBNBCommand(cmd.Cmd):
             """Updates an instance based on the class name and id by adding or
             updating attribute (save the change into the JSON file).
                 Ex: $ update BaseModel 1234-1234-1234
-                      email "aibnb@holbertonschool.com"""
-        )
+                      email "aibnb@holbertonschool.com""")
 
     def emptyline(self):
         """
@@ -248,6 +255,61 @@ class HBNBCommand(cmd.Cmd):
             Used for overriding the emptyline function
         """
         pass
+
+    def count(self, arg):
+        """
+            Prnits the number of elements inside the FileStorage that
+            are of instances of cls
+        """
+        arg_list = HBNBCommand.parse(arg)
+        if len(arg_list) > 0 and arg_list[0] not in HBNBCommand.__class_lst:
+            print("** class doesn't exist **")
+        else:
+            objl = []
+            for obj in storage.all().values():
+                if len(arg_list) > 0 and arg_list[0] == obj.__class__.__name__:
+                    objl.append(obj.__str__())
+                elif len(arg_list) == 0:
+                    objl.append(obj.__str__())
+            print(len(objl))
+
+    def show(self, cls):
+        """
+            Gives all the elements inside the FileStorage that
+            are of instances of cls
+        """
+        pass
+
+    def destroy(self, cls):
+        """
+            Gives all the elements inside the FileStorage that
+            are of instances of cls
+        """
+        pass
+
+    def update(self, cls):
+        """
+            Gives all the elements inside the FileStorage that
+            are of instances of cls
+        """
+        pass
+
+    def default(self, line):
+        """
+            Handles the case where the the command has no equivlaent
+            do_ method
+        """
+
+        line_p = HBNBCommand.parse(line, '.')
+        if line_p[0] in HBNBCommand.__class_lst.keys():
+            if line_p[1][:-2] in self.__class_funcs.keys():
+                func = self.__class_funcs[line_p[1][:-2]]
+                cls = HBNBCommand.__class_lst[line_p[0]]
+                func(cls.__name__)
+            else:
+                print("** Unknown option **")
+        else:
+            super().default(line)
 
 
 if __name__ == "__main__":
