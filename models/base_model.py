@@ -27,21 +27,38 @@ class BaseModel:
             - created_at and updated_at must be converted to string object in ISO format:
                 - format: %Y-%m-%dT%H:%M:%S.%f (ex: 2017-06-14T22:31:03.285259)
     """
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """
         Initlizes the public attributes of the instance after creation
+        
+        Args:
+            *args (any): Unused.
+            **kwargs (dict): Key/value pairs of attributes.
+            
         """
+
+        TIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%f"
 
         self.id = str(uuid4())
         self.created_at = datetime.now()
         self.updated_at = self.created_at
+
+        if len(kwargs) != 0:
+            for key, value in kwargs.items():
+                if key == "created_at" or key == "updated_at":
+                    self.__dict__[key] = datetime.strptime(value, TIME_FORMAT)
+                elif key == "id":
+                    self.__dict__[key] = str(value)
+                else:
+                    self.__dict__[key] = value
 
     def __str__(self):
         """
         Returns the string representation of this class
         """
 
-        return "{} ({}) {}".format(self.__class__.__name__, self.id, self.__dict__)
+        return "{} ({}) {}".format(self.__class__.__name__, self.id,
+                                   self.__dict__)
 
     def save(self):
         """
