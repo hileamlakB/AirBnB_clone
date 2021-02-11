@@ -18,8 +18,8 @@ from models.review import Review
 
 class HBNBCommand(cmd.Cmd):
     """
-        HBNBC - a console class for the the airbnb clone 
-        program 
+        HBNBC - a console class for the the airbnb clone
+        program
     """
 
     prompt = '(hbnb)'
@@ -67,8 +67,8 @@ class HBNBCommand(cmd.Cmd):
     def do_create(self, arg):
         """
             Creates a new instance of BaseModel,
-            saves it (to the JSON file) and prints 
-            the id. 
+            saves it (to the JSON file) and prints
+            the id.
                 Ex: $ create BaseModel
         """
 
@@ -94,9 +94,9 @@ class HBNBCommand(cmd.Cmd):
               stores it in the JSON file and prints its id""")
 
     def do_show(self, arg):
-        """ 
+        """
             Prints the string representation of an instance based
-            on the class name and id. 
+            on the class name and id.
                 Ex: $ show BaseModel 1234-1234-1234
         """
         arg_lst = HBNBCommand.parse(arg)
@@ -122,14 +122,14 @@ class HBNBCommand(cmd.Cmd):
             Prints Help for for the creat function
         """
         print("""Prints the string representation of an instance based
-            on the class name and id. 
+            on the class name and id.
                 Ex: $ show BaseModel 1234-1234-1234
             """)
 
     def do_destroy(self, arg):
         """
-            Deletes an instance based on the class name and id 
-            (save the change into the JSON file). 
+            Deletes an instance based on the class name and id
+            (save the change into the JSON file).
                 Ex: $ destroy BaseModel 1234-1234-1234
         """
         arg_lst = HBNBCommand.parse(arg)
@@ -150,15 +150,15 @@ class HBNBCommand(cmd.Cmd):
 
     def help_destroy(self):
         """
-            Prints Help for the destroy function 
+            Prints Help for the destroy function
         """
-        print("""Deletes an instance based on the class name and id 
-              (save the change into the JSON file). 
+        print("""Deletes an instance based on the class name and id
+              (save the change into the JSON file).
                 Ex: $ destroy BaseModel 1234-1234-1234""")
 
     def do_all(self, arg):
         """
-            Prints all string representation of all instances based or 
+            Prints all string representation of all instances based or
             not on the class name.
                 Ex: $ all BaseModel or $ all
         """
@@ -178,15 +178,16 @@ class HBNBCommand(cmd.Cmd):
         """
             prints help for the all function
         """
-        print("""Prints all string representation of all instances based or 
+        print("""Prints all string representation of all instances based or
             not on the class name.
                 Ex: $ all BaseModel or $ all""")
 
     def do_update(self, arg):
         """
-            Updates an instance based on the class name and id by adding or 
-            updating attribute (save the change into the JSON file). 
-                Ex: $ update BaseModel 1234-1234-1234 email "aibnb@holbertonschool.com"
+            Updates an instance based on the class name and id by adding or
+            updating attribute (save the change into the JSON file).
+                Ex: $ update BaseModel 1234-1234-1234 email
+                      "aibnb@holbertonschool.com"
         """
         arg_list = HBNBCommand.parse(arg)
         objdict = storage.all()
@@ -235,9 +236,10 @@ class HBNBCommand(cmd.Cmd):
             prints Help for the update function
         """
         print(
-            """Updates an instance based on the class name and id by adding or 
-            updating attribute (save the change into the JSON file). 
-                Ex: $ update BaseModel 1234-1234-1234 email "aibnb@holbertonschool.com"""
+            """Updates an instance based on the class name and id by adding or
+            updating attribute (save the change into the JSON file).
+                Ex: $ update BaseModel 1234-1234-1234
+                      email "aibnb@holbertonschool.com"""
         )
 
     def emptyline(self):

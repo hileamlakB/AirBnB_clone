@@ -331,7 +331,11 @@ class TestBaseKwargs(unittest.TestCase):
 
         TIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%f"
         # Tests if the updated time is also set coorrectl set
-        self.assertDateTimeAlmostEqual(datetime.strptime(self.some_time, TIME_FORMAT), self.cls2.updated_at)
+        self.assertDateTimeAlmostEqual(
+                                       datetime.strptime(
+                                                         self.some_time,
+                                                         TIME_FORMAT),
+                                       self.cls2.updated_at)
 
         # Test if the class created_at is around the correct time
         self.assertDateTimeAlmostEqual(datetime.strptime(self.some_time, TIME_FORMAT), self.cls3.created_at)
@@ -351,7 +355,8 @@ class TestBaseKwargs(unittest.TestCase):
             operates as it is intended
         """
 
-        # Test if dict["updated_at"] & dict["created_at"] use the isotime format
+        # Test if dict["updated_at"] & dict["created_at"] use the i
+        # sotime format
         self.assertEqual(self.cls3_obj["updated_at"],
                          self.cls3.updated_at.isoformat())
         self.assertEqual(self.cls2_obj["created_at"],
@@ -375,7 +380,8 @@ class TestBaseKwargs(unittest.TestCase):
             "__class__": self.cls3.__class__.__name__,
         }
 
-        # Test if returned dictionary from to_dict  and the excpected one are equal
+        # Test if returned dictionary from to_dict  and the excpected
+        # one are equal
         self.assertDictEqual(self.cls3_dic, self.cls3_obj)
         #self.assertDictEqual(self.cls4_dic, self.cls4_obj)
 
