@@ -39,6 +39,7 @@ class TestFileStorage_methods(unittest.TestCase):
             pass
         self.cls_bm = BaseModel()
         models.storage.new(self.cls_bm)
+        models.storage.save()
 
     def tearDown(self):
         try:
@@ -66,12 +67,10 @@ class TestFileStorage_methods(unittest.TestCase):
         self.assertRaises(AttributeError, models.storage.new, None)
 
     def test_save(self):
-
-        models.storage.save()
         save_text = ""
         with open("file.json", "r") as json_file:
             save_text = json_file.read()
-            self.assertIn("BaseModel." + self.cls_bm, save_text)
+            self.assertIn("BaseModel." + self.cls_bm.id, save_text)
 
     def test_save_with_arg(self):
         self.assertRaises(TypeError, models.storage.save, None)
@@ -83,8 +82,6 @@ class TestFileStorage_methods(unittest.TestCase):
         self.assertIn("BaseModel." + self.cls_bm.id,
                       FileStorage._FileStorage__objects.keys())
 
-    def test_reload_no_file(self):
-        self.assertRaises(FileNotFoundError, models.storage.reload)
 
     def test_reload_with_arg(self):
         self.assertRaises(TypeError, models.storage.reload, None)
