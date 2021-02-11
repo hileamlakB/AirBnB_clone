@@ -31,16 +31,27 @@ class TestBaseNoKwargs(unittest.TestCase):
 
     Requirment:
         Public instance attributes:
-            id: string - assign with an uuid when an instance is created:
-            created_at: datetime - assign with the current datetime when an instance is created
-            updated_at: datetime - assign with the current datetime when an instance is created and it will be updated every time you change your object
+            id: string - assign with an uuid when an instance
+                is created:
+            created_at: datetime - assign with the current
+                        datetime when an instance is created
+            updated_at: datetime - assign with the current datetime
+                        when an instance is created and it will be updated
+                        every time you change your objet
+
         __str__: should print: [<class name>] (<self.id>) <self.__dict__>
+
         Public instance methods:
-            save(self): updates the public instance attribute updated_at with the current datetime
-            to_dict(self): returns a dictionary containing all keys/values of __dict__ of the instance:
-                - by using self.__dict__, only instance attributes set will be returned
-                - a key __class__ must be added to this dictionary with the class name of the object
-                - created_at and updated_at must be converted to string object in ISO format:
+            save(self): updates the public instance attribute updated_at with
+                        the current datetime
+            to_dict(self): returns a dictionary containing all keys/values of
+                            __dict__ of the instance:
+                - by using self.__dict__, only instance attributes set will be
+                    returned
+                - a key __class__ must be added to this dictionary with the
+                    class name of the object
+                - created_at and updated_at must be converted to string
+                    object in ISO format:
                     format: %Y-%m-%dT%H:%M:%S.%f (ex: 2017-06-14T22:31:03.285259)
     """
     def assertDateTimeAlmostEqual(self, time1, time2):
@@ -120,7 +131,8 @@ class TestBaseNoKwargs(unittest.TestCase):
 
     def test_time_type(self):
         """
-        Test if the created_at and updated_at attrubutes have the corrcet datatype
+            Test if the created_at and updated_at attrubutes have the
+            corrcet datatype
         """
 
         # Tests if they are instances of datetime
@@ -192,7 +204,8 @@ class TestBaseNoKwargs(unittest.TestCase):
 
     def test_to_dict_keys(self):
         """
-            Test if the basic attributes exist in the the reuturned object from to_dict function
+            Test if the basic attributes exist in the the reuturned object from
+            to_dict function
         """
 
         self.assertIn("updated_at", self.cls3_obj.keys())
@@ -231,15 +244,22 @@ class TestBaseKwargs(unittest.TestCase):
     Requirment:
         Public instance attributes:
             id: string - assign with an uuid when an instance is created:
-            created_at: datetime - assign with the current datetime when an instance is created
-            updated_at: datetime - assign with the current datetime when an instance is created and it will be updated every time you change your object
+            created_at: datetime - assign with the current datetime when an
+                        instance is created
+            updated_at: datetime - assign with the current datetime when an
+                        instance is created and it will be updated every time you
+                        change your object
         __str__: should print: [<class name>] (<self.id>) <self.__dict__>
         Public instance methods:
-            save(self): updates the public instance attribute updated_at with the current datetime
-            to_dict(self): returns a dictionary containing all keys/values of __dict__ of the instance:
+            save(self): updates the public instance attribute updated_at with the
+                        current datetime
+            to_dict(self): returns a dictionary containing all keys/values of __dict__
+                            of the instance:
                 - by using self.__dict__, only instance attributes set will be returned
-                - a key __class__ must be added to this dictionary with the class name of the object
-                - created_at and updated_at must be converted to string object in ISO format:
+                - a key __class__ must be added to this dictionary with the class name
+                    of the object
+                - created_at and updated_at must be converted to string object in
+                    ISO format:
                     format: %Y-%m-%dT%H:%M:%S.%f (ex: 2017-06-14T22:31:03.285259)
     """
     def assertDateTimeAlmostEqual(self, time1, time2):
@@ -308,7 +328,8 @@ class TestBaseKwargs(unittest.TestCase):
 
     def test_time_type(self):
         """
-        Test if the created_at and updated_at attrubutes have the corrcet datatype
+            Test if the created_at and updated_at attrubutes have the
+            corrcet datatype
         """
 
         # Tests if they are instances of datetime
@@ -332,17 +353,18 @@ class TestBaseKwargs(unittest.TestCase):
         TIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%f"
         # Tests if the updated time is also set coorrectl set
         self.assertDateTimeAlmostEqual(
-                                       datetime.strptime(
-                                                         self.some_time,
-                                                         TIME_FORMAT),
-                                       self.cls2.updated_at)
+            datetime.strptime(self.some_time, TIME_FORMAT),
+            self.cls2.updated_at)
 
         # Test if the class created_at is around the correct time
-        self.assertDateTimeAlmostEqual(datetime.strptime(self.some_time, TIME_FORMAT), self.cls3.created_at)
+        self.assertDateTimeAlmostEqual(
+            datetime.strptime(self.some_time, TIME_FORMAT),
+            self.cls3.created_at)
 
     def test_to_dict_keys(self):
         """
-            Test if the basic attributes exist in the the reuturned object from to_dict function
+            Test if the basic attributes exist in the the reuturned object from
+            to_dict function
         """
 
         self.assertIn("updated_at", self.cls3_obj.keys())
