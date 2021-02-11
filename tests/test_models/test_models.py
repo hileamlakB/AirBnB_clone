@@ -53,29 +53,72 @@ class TestBaseCorrectness(unittest.TestCase):
         Creates the classes needed for testing
         """
 
-        self.NUMOFTESTS = 100
-        self.cls_id_lst = [BaseModel().id for x in range(self.NUMOFTESTS)]
-
         self.cls1_creation = datetime.now()
         self.cls1 = BaseModel()
 
         self.cls2 = BaseModel()
         self.cls3 = BaseModel()
+        self.cls3_obj = self.cls3.to_obj()
         self.cls4 = BaseModel()
 
-    def test_id(self):
+    def test_id_exists(self):
+        """ 
+        test if the id attribute exists
         """
-        Tests the correctness of the id attribute
+        # Test if id attribute exists
+        self.assertIn("id", self.cls1.__dict__.keys())
+        self.assertIn("id", self.cls2.__dict__.keys())
+        self.assertIn("id", self.cls3.__dict__.keys())
+
+    def test_id_type(self):
+        """
+        Tests the type of the id attribute
         """
 
         # Test if it is a string
         self.assertIsInstance(self.cls1.id, str)
         self.assertIsInstance(self.cls2.id, str)
 
+    def test_id_uniquness(self):
+        """
+        Tests the uniquness of each id attribute
+        """
+
+        NUMOFTESTS = 100
+        cls_id_lst = [BaseModel().id for x in range(NUMOFTESTS)]
         # Test that ids from different objects are infact different
-        for x in range(self.NUMOFTESTS):
-            for y in range(x + 1, self.NUMOFTESTS):
-                self.assertNotEqual(self.cls_id_lst[x], self.cls_id_lst[y])
+        for x in range(NUMOFTESTS):
+            for y in range(x + 1, NUMOFTESTS):
+                self.assertNotEqual(cls_id_lst[x], cls_id_lst[y])
+
+    def test_time_exists(self):
+        """
+        Tests the existance of the created_at and updated_at
+        public attributes
+        """
+
+        # Test if created_at and updated_at attribute exists
+        self.assertIn("created_at", self.cls1.__dict__.keys())
+        self.assertIn("created_at", self.cls2.__dict__.keys())
+        self.assertIn("created_at", self.cls3.__dict__.keys())
+
+        self.assertIn("updated_at", self.cls1.__dict__.keys())
+        self.assertIn("updated_at", self.cls2.__dict__.keys())
+        self.assertIn("updated_at", self.cls3.__dict__.keys())
+
+    def test_time_type(self):
+        """
+        Test if the created_at and updated_at attrubutes have the corrcet datatype
+        """
+
+        # Tests if they are instances of datetime
+        self.assertIsInstance(self.cls1.created_at, datetime)
+        self.assertIsInstance(self.cls2.created_at, datetime)
+        self.assertIsInstance(self.cls3.created_at, datetime)
+
+        self.assertIsInstance(self.cls1.updated_at, datetime)
+        self.assertIsInstance(self.cls2.updated_at, datetime)
+        self.assertIsInstance(self.cls3.updated_at, datetime)
 
     def test_time(self):
         """
@@ -83,15 +126,11 @@ class TestBaseCorrectness(unittest.TestCase):
         public attributes
         """
 
-        # Tests if they are instances of datetime
-        self.assertIsInstance(self.cls1.created_at, datetime)
-
         # Test if the class created_at is around the correct time
         self.assertDateTimeAlmostEqual(self.cls1_creation,
                                        self.cls1.created_at)
 
         # Tests if the updated time is also set coorrectl set
-        self.assertIsInstance(self.cls1.updated_at, datetime)
         self.assertDateTimeAlmostEqual(self.cls1.created_at,
                                        self.cls1.updated_at)
 
@@ -114,6 +153,13 @@ class TestBaseCorrectness(unittest.TestCase):
         # Test if the string represntation follows the format
         self.assertEqual(returned, expected)
 
+    def test_save_exist(self):
+        """
+            Tests the existance of the save function
+        """
+
+        self.assertIn("save", self.cls2.__dict__)
+
     def test_save(self):
         """
             Test if the save function updates the time
@@ -125,24 +171,30 @@ class TestBaseCorrectness(unittest.TestCase):
         # Test if the class updated_at variable is updated corrctly with object updates
         self.assertDateTimeAlmostEqual(self.cls2_update, self.cls2.updated_at)
 
+    def test_to_obj_exists(self):
+        """
+            check if the to_obj function exists
+        """
+
+        self.assertIn("to_obj", self.cls3.__dict__)
+
+    def test_to_obj_keys(self):
+        """
+            Test if the basic attributes exist in the the reuturned object from to_obj function
+        """
+
+        self.assertIn("updated_at", self.cls3_obj.keys())
+        self.assertIn("created_at", self.cls3_obj.keys())
+
     def test_to_obj(self):
         """
             Test if the to_obj function
             operates as it is intended
         """
-        dict = self.cls3.to_obj()
 
-        # Test if "updated_at" & "created_at" are attributes of the returned dictionary
-        if "updated_at" not in dict.keys():
-            self.fail("updated_at Key not found in returned dictionary")
-        if "created_at" not in dict.keys():
-            self.fail("created_at Key not found in returned dictionary")
-        else:
-            # Test if dict["updated_at"] & dict["created_at"] use the isotime format
-            self.assertEquals(dict["updated_at"],
-                              dict["updated_at"].isoformat())
-            self.assertEquals(dict["created_at"],
-                              dict["updated_at"].isoformat())
+        # Test if dict["updated_at"] & dict["created_at"] use the isotime format
+        self.assertEquals(dict["updated_at"], dict["updated_at"].isoformat())
+        self.assertEquals(dict["created_at"], dict["updated_at"].isoformat())
 
         # Include extra variables to make sure they are handeld by the to_obj function
         self.cls3.name = "Random Name"
