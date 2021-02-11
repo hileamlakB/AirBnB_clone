@@ -174,8 +174,8 @@ class TestBaseNoKwargs(unittest.TestCase):
         """
 
         returned = self.cls1.__str__()
-        expected = "{} ({}) {}".format(self.cls1.__class__.__name__,
-                                       self.cls1.id, self.cls1.__dict__)
+        expected = "[{}] ({}) {}".format(self.cls1.__class__.__name__,
+                                         self.cls1.id, self.cls1.__dict__)
 
         # Test if the string represntation follows the format
         self.assertEqual(returned, expected)
