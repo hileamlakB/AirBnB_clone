@@ -267,7 +267,7 @@ class TestBaseKwargs(unittest.TestCase):
                     class name of the object
                 - created_at and updated_at must be converted to string object
                     in ISO format:
-                    format: %Y-%m-%dT%H:%M:%S.%f (ex: 2017-06-14T22:31:03.285259)
+                    %Y-%m-%dT%H:%M:%S.%f (ex: 2017-06-14T22:31:03.285259)
     """
     def assertDateTimeAlmostEqual(self, time1, time2):
         """
