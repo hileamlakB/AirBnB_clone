@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-Defines a Model class that will be the base for all the 
+Defines a Model class that will be the base for all the
 classes to be created in the airbnb module. This class
 will define all the basic things (attributes and functions)
 that will be used through out the project by other class
@@ -17,7 +17,7 @@ class BaseModel:
         @id: string - assign with an uuid when an instance is created:
         @created_at: datetime - assign with the current datetime when an instance is created
         @updated_at: datetime - assign with the current datetime when an instance is created and it will be updated every time you change your object
-        
+
     Methods:
         @__str__: should print: [<class name>] (<self.id>) <self.__dict__>
         @save(self): updates the public instance attribute updated_at with the current datetime
