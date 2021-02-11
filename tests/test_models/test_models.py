@@ -11,13 +11,20 @@ class TestBaseInitiation(unittest.TestCase):
     """
     Tests the correct initiation of the BaseModel class
     """
-    def test_iniation(self):
+    def test_iniation_no_kwargs(self):
         """Tests initiation"""
+
         cls = BaseModel()
         self.assertIsInstance(cls, BaseModel)
 
+    def test_iniation_kwargs(self):
+        """Tests initiation"""
 
-class TestBaseCorrectness(unittest.TestCase):
+        cls = BaseModel(id="NO_name", age=15)
+        self.assertIsInstance(cls, BaseModel)
+
+
+class TestBaseNoKwargs(unittest.TestCase):
     """
     Tests the existance of public attributes
     and their correctness.
@@ -152,8 +159,8 @@ class TestBaseCorrectness(unittest.TestCase):
         """
 
         returned = self.cls1.__str__()
-        expected = "{} ({}) {}".format(self.cls1.__class__.__name__, self.cls1.id,
-                                       self.cls1.__dict__)
+        expected = "{} ({}) {}".format(self.cls1.__class__.__name__,
+                                       self.cls1.id, self.cls1.__dict__)
 
         # Test if the string represntation follows the format
         self.assertEqual(returned, expected)
@@ -198,8 +205,10 @@ class TestBaseCorrectness(unittest.TestCase):
         """
 
         # Test if dict["updated_at"] & dict["created_at"] use the isotime format
-        self.assertEqual(self.cls3_obj["updated_at"], self.cls3.updated_at.isoformat())
-        self.assertEqual(self.cls3_obj["created_at"], self.cls3.created_at.isoformat())
+        self.assertEqual(self.cls3_obj["updated_at"],
+                         self.cls3.updated_at.isoformat())
+        self.assertEqual(self.cls3_obj["created_at"],
+                         self.cls3.created_at.isoformat())
 
         self.cls3_dic = {
             "name": "Random Name",
@@ -212,6 +221,162 @@ class TestBaseCorrectness(unittest.TestCase):
 
         # Test if returned dictionary from to_dict  and the excpected one are equal
         self.assertDictEqual(self.cls3_dic, self.cls3_obj)
+
+
+class TestBaseKwargs(unittest.TestCase):
+    """
+    Tests the existance of public attributes
+    and their correctness when kwargs is passed during initalization.
+
+    Requirment:
+        Public instance attributes:
+            id: string - assign with an uuid when an instance is created:
+            created_at: datetime - assign with the current datetime when an instance is created
+            updated_at: datetime - assign with the current datetime when an instance is created and it will be updated every time you change your object
+        __str__: should print: [<class name>] (<self.id>) <self.__dict__>
+        Public instance methods:
+            save(self): updates the public instance attribute updated_at with the current datetime
+            to_dict(self): returns a dictionary containing all keys/values of __dict__ of the instance:
+                - by using self.__dict__, only instance attributes set will be returned
+                - a key __class__ must be added to this dictionary with the class name of the object
+                - created_at and updated_at must be converted to string object in ISO format:
+                    format: %Y-%m-%dT%H:%M:%S.%f (ex: 2017-06-14T22:31:03.285259)
+    """
+    def assertDateTimeAlmostEqual(self, time1, time2):
+        """
+            checks the equalness of two datetime objects
+            by comaring their year, month, date, hour, and minute but
+            not anything less than that like sec and millissecond
+        """
+        self.assertEqual(time1.year, time2.year)
+        self.assertEqual(time1.month, time2.month)
+        self.assertEqual(time1.day, time2.day)
+        self.assertEqual(time1.hour, time2.hour)
+        self.assertEqual(time1.minute, time2.minute)
+
+    def setUp(self):
+        """
+        Creates the classes needed for testing
+        """
+
+        self.some_time = str(datetime(1290, 2, 15, 12, 34, 56, 11).isoformat())
+
+        self.cls1 = BaseModel(id="id")
+        self.cls1_obj = self.cls1.to_dict()
+        self.cls2 = BaseModel(updated_at=self.some_time)
+        self.cls2_obj = self.cls2.to_dict()
+
+        self.cls3 = BaseModel(created_at=self.some_time)
+        # Include extra variables to make sure they are handeld by the to_dict function
+        self.cls3.name = "Random Name"
+        self.cls3.number = 444
+        self.cls3_obj = self.cls3.to_dict()
+
+        self.cls4 = BaseModel(created_at=self.some_time, id="Nones")
+        # Include extra variables to make sure they are handeld by the to_dict function
+        self.cls4_obj = self.cls4.to_dict()
+
+    def test_id_exists(self):
+        """
+        test if the id attribute exists
+        """
+        # Test if id attribute exists
+        self.assertIn("id", self.cls1.__dict__.keys())
+        self.assertIn("id", self.cls2.__dict__.keys())
+        self.assertIn("id", self.cls3.__dict__.keys())
+
+    def test_id_type(self):
+        """
+        Tests the type of the id attribute
+        """
+
+        # Test if it is a string
+        self.assertIsInstance(self.cls1.id, str)
+        self.assertIsInstance(self.cls2.id, str)
+        self.assertIsInstance(self.cls3.id, str)
+
+    def test_time_exists(self):
+        """
+        Tests the existance of the created_at and updated_at
+        public attributes
+        """
+
+        # Test if created_at and updated_at attribute exists
+        self.assertIn("created_at", self.cls2.__dict__.keys())
+        self.assertIn("created_at", self.cls1.__dict__.keys())
+        self.assertIn("updated_at", self.cls3.__dict__.keys())
+
+    def test_time_type(self):
+        """
+        Test if the created_at and updated_at attrubutes have the corrcet datatype
+        """
+
+        # Tests if they are instances of datetime
+        self.assertIsInstance(self.cls1.created_at, datetime)
+        self.assertIsInstance(self.cls2.created_at, datetime)
+        self.assertIsInstance(self.cls3.created_at, datetime)
+
+        self.assertIsInstance(self.cls1.updated_at, datetime)
+        self.assertIsInstance(self.cls2.updated_at, datetime)
+        self.assertIsInstance(self.cls3.updated_at, datetime)
+
+        self.assertRaises(TypeError, BaseModel(updated_at="Wrong_format"))
+        self.assertRaises(TypeError, BaseModel(created_at="Wrong_format"))
+
+    def test_time(self):
+        """
+        Tests the correctness of the created_at and updated_at
+        public attributes
+        """
+
+        # Tests if the updated time is also set coorrectl set
+        self.assertDateTimeAlmostEqual(self.some_time, self.cls2.updated_at)
+
+        # Test if the class created_at is around the correct time
+        self.assertDateTimeAlmostEqual(self.some_time, self.cls1.created_at)
+
+    def test_to_dict_keys(self):
+        """
+            Test if the basic attributes exist in the the reuturned object from to_dict function
+        """
+
+        self.assertIn("updated_at", self.cls3_obj.keys())
+        self.assertIn("created_at", self.cls2_obj.keys())
+        self.assertIn("created_at", self.cls1_obj.keys())
+
+    def test_to_dict(self):
+        """
+            Test if the to_dict function
+            operates as it is intended
+        """
+
+        # Test if dict["updated_at"] & dict["created_at"] use the isotime format
+        self.assertEqual(self.cls3_obj["updated_at"],
+                         self.cls3.updated_at.isoformat())
+        self.assertEqual(self.cls2_obj["created_at"],
+                         self.cls2.created_at.isoformat())
+        self.assertEqual(self.cls1_obj["created_at"],
+                         self.cls1.created_at.isoformat())
+
+        self.cls3_dic = {
+            "name": "Random Name",
+            "number": 444,
+            "id": self.cls3.id,
+            "created_at": self.some_time,
+            "updated_at": str(self.cls3.updated_at.isoformat()),
+            "__class__": self.cls3.__class__.__name__,
+        }
+
+        self.cls4_dic = {
+            "id": "Nones",
+            "created_at": self.some_time,
+            "updated_at": str(self.cls3.updated_at.isoformat()),
+            "__class__": self.cls3.__class__.__name__,
+        }
+
+        # Test if returned dictionary from to_dict  and the excpected one are equal
+        self.assertDictEqual(self.cls3_dic, self.cls3_obj)
+        self.assertDictEqual(self.cls4_dic, self.cls4_obj)
 
 
 if __name__ == "__main__":
