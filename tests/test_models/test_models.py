@@ -52,7 +52,8 @@ class TestBaseNoKwargs(unittest.TestCase):
                     class name of the object
                 - created_at and updated_at must be converted to string
                     object in ISO format:
-                    format: %Y-%m-%dT%H:%M:%S.%f (ex: 2017-06-14T22:31:03.285259)
+                    format: %Y-%m-%dT%H:%M:%S.%f
+                    (ex: 2017-06-14T22:31:03.285259)
     """
     def assertDateTimeAlmostEqual(self, time1, time2):
         """
@@ -77,7 +78,8 @@ class TestBaseNoKwargs(unittest.TestCase):
         self.cls2 = BaseModel()
 
         self.cls3 = BaseModel()
-        # Include extra variables to make sure they are handeld by the to_dict function
+        # Include extra variables to make sure they are handeld
+        # by the to_dict function
         self.cls3.name = "Random Name"
         self.cls3.number = 444
         self.cls3_obj = self.cls3.to_dict()
@@ -162,7 +164,8 @@ class TestBaseNoKwargs(unittest.TestCase):
         # Test the change of updtaed time with the change of attribute
         self.cls1.id = "Random string has been set to be the id"
 
-        # Test if the class updated_at variable is updated corrctly with class updates
+        # Test if the class updated_at variable is updated corrctly
+        # with class updates
         self.assertDateTimeAlmostEqual(self.cls1_update, self.cls1.updated_at)
 
     def test_str(self):
@@ -192,7 +195,8 @@ class TestBaseNoKwargs(unittest.TestCase):
         self.cls2_update = datetime.now()
         self.cls2.save()
 
-        # Test if the class updated_at variable is updated corrctly with object updates
+        # Test if the class updated_at variable is updated corrctly
+        # with object updates
         self.assertDateTimeAlmostEqual(self.cls2_update, self.cls2.updated_at)
 
     def test_to_dict_exists(self):
@@ -217,7 +221,8 @@ class TestBaseNoKwargs(unittest.TestCase):
             operates as it is intended
         """
 
-        # Test if dict["updated_at"] & dict["created_at"] use the isotime format
+        # Test if dict["updated_at"] & dict["created_at"] use the
+        # isotime format
         self.assertEqual(self.cls3_obj["updated_at"],
                          self.cls3.updated_at.isoformat())
         self.assertEqual(self.cls3_obj["created_at"],
@@ -232,7 +237,8 @@ class TestBaseNoKwargs(unittest.TestCase):
             "__class__": self.cls3.__class__.__name__,
         }
 
-        # Test if returned dictionary from to_dict  and the excpected one are equal
+        # Test if returned dictionary from to_dict  and the
+        # excpected one are equal
         self.assertDictEqual(self.cls3_dic, self.cls3_obj)
 
 
@@ -247,20 +253,21 @@ class TestBaseKwargs(unittest.TestCase):
             created_at: datetime - assign with the current datetime when an
                         instance is created
             updated_at: datetime - assign with the current datetime when an
-                        instance is created and it will be updated every time you
-                        change your object
+                        instance is created and it will be updated every
+                        time you change your object
         __str__: should print: [<class name>] (<self.id>) <self.__dict__>
         Public instance methods:
-            save(self): updates the public instance attribute updated_at with the
-                        current datetime
-            to_dict(self): returns a dictionary containing all keys/values of __dict__
-                            of the instance:
-                - by using self.__dict__, only instance attributes set will be returned
-                - a key __class__ must be added to this dictionary with the class name
-                    of the object
-                - created_at and updated_at must be converted to string object in
-                    ISO format:
-                    format: %Y-%m-%dT%H:%M:%S.%f (ex: 2017-06-14T22:31:03.285259)
+            save(self): updates the public instance attribute updated_at with
+                        the current datetime
+            to_dict(self): returns a dictionary containing all keys/values of
+                            __dict__ of the instance:
+                - by using self.__dict__, only instance attributes set will be
+                    returned
+                - a key __class__ must be added to this dictionary with the
+                    class name of the object
+                - created_at and updated_at must be converted to string object
+                    in ISO format:
+                    %Y-%m-%dT%H:%M:%S.%f (ex: 2017-06-14T22:31:03.285259)
     """
     def assertDateTimeAlmostEqual(self, time1, time2):
         """
@@ -287,13 +294,15 @@ class TestBaseKwargs(unittest.TestCase):
         self.cls2_obj = self.cls2.to_dict()
 
         self.cls3 = BaseModel(created_at=self.some_time)
-        # Include extra variables to make sure they are handeld by the to_dict function
+        # Include extra variables to make sure they are handeld by the
+        # to_dict function
         self.cls3.name = "Random Name"
         self.cls3.number = 444
         self.cls3_obj = self.cls3.to_dict()
 
         self.cls4 = BaseModel(created_at=self.some_time, id="Nones")
-        # Include extra variables to make sure they are handeld by the to_dict function
+        # Include extra variables to make sure they are handeld by the
+        # to_dict function
         self.cls4_obj = self.cls4.to_dict()
 
     def test_id_exists(self):
