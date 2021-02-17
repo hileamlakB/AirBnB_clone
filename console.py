@@ -307,11 +307,10 @@ class HBNBCommand(cmd.Cmd):
                 func = self.__class_funcs[line_p[1][:-2]]
                 cls = HBNBCommand.__class_lst[line_p[0]]
                 func(cls.__name__)
-            else:
-                print("** Unknown option **")
+                return False
         else:
             super().default(line)
-
+        return False
 
 if __name__ == "__main__":
     console = HBNBCommand()
