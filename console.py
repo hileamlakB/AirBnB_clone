@@ -82,11 +82,13 @@ class HBNBCommand(cmd.Cmd):
         """
 
         arg_lst = HBNBCommand.parse(arg)
-        if not len(arg_lst):
+        if len(arg_lst) == 0:
             print("** class name missing **")
+            return False
 
         if len(arg_lst) > 1:
             print("** to many arguments **")
+            return False
 
         if (arg_lst[0] in HBNBCommand.__class_lst.keys()):
             new_obj = HBNBCommand.__class_lst[arg_lst[0]]()
@@ -109,7 +111,6 @@ class HBNBCommand(cmd.Cmd):
                 Ex: $ show BaseModel 1234-1234-1234
         """
         arg_lst = HBNBCommand.parse(arg)
-        storage.reload()
         db = storage.all()
         if not len(arg_lst):
             print("** class name missing **")
@@ -302,12 +303,13 @@ class HBNBCommand(cmd.Cmd):
         """
 
         line_p = HBNBCommand.parse(line, '.')
-        if line_p[0] in HBNBCommand.__class_lst.keys():
+        if line_p[0] in HBNBCommand.__class_lst.keys() and len(line_p) > 1:
             if line_p[1][:-2] in self.__class_funcs.keys():
                 func = self.__class_funcs[line_p[1][:-2]]
                 cls = HBNBCommand.__class_lst[line_p[0]]
                 func(cls.__name__)
-                return False
+            else:
+                print("** class doesn't exist **")
         else:
             super().default(line)
         return False
