@@ -72,7 +72,7 @@ class TestBaseNoKwargs(unittest.TestCase):
         Creates the classes needed for testing
         """
 
-        self.cls1_creation = datetime.now()
+        self.cls1_creation = datetime.today()
         self.cls1 = BaseModel()
 
         self.cls2 = BaseModel()
@@ -160,7 +160,7 @@ class TestBaseNoKwargs(unittest.TestCase):
         self.assertDateTimeAlmostEqual(self.cls1.created_at,
                                        self.cls1.updated_at)
 
-        self.cls1_update = datetime.now()
+        self.cls1_update = datetime.today()
         # Test the change of updtaed time with the change of attribute
         self.cls1.id = "Random string has been set to be the id"
 
@@ -192,7 +192,7 @@ class TestBaseNoKwargs(unittest.TestCase):
             Test if the save function updates the time
         """
 
-        self.cls2_update = datetime.now()
+        self.cls2_update = datetime.today()
         self.cls2.save()
 
         # Test if the class updated_at variable is updated corrctly
@@ -415,6 +415,56 @@ class TestBaseKwargs(unittest.TestCase):
         # one are equal
         self.assertDictEqual(self.cls3_dic, self.cls3_obj)
         #self.assertDictEqual(self.cls4_dic, self.cls4_obj)
+
+
+class TestBaseModel_to_dict(unittest.TestCase):
+    """Unittests for testing to_dict method of the BaseModel class."""
+
+    def test_to_dict_type(self):
+        bm = BaseModel()
+        self.assertTrue(dict, type(bm.to_dict()))
+
+    def test_to_dict_contains_correct_keys(self):
+        bm = BaseModel()
+        self.assertIn("id", bm.to_dict())
+        self.assertIn("created_at", bm.to_dict())
+        self.assertIn("updated_at", bm.to_dict())
+        self.assertIn("__class__", bm.to_dict())
+
+    def test_to_dict_contains_added_attributes(self):
+        bm = BaseModel()
+        bm.name = "Holberton"
+        bm.my_number = 98
+        self.assertIn("name", bm.to_dict())
+        self.assertIn("my_number", bm.to_dict())
+
+    def test_to_dict_datetime_attributes_are_strs(self):
+        bm = BaseModel()
+        bm_dict = bm.to_dict()
+        self.assertEqual(str, type(bm_dict["created_at"]))
+        self.assertEqual(str, type(bm_dict["updated_at"]))
+
+    def test_to_dict_output(self):
+        dt = datetime.today()
+        bm = BaseModel()
+        bm.id = "123456"
+        bm.created_at = bm.updated_at = dt
+        tdict = {
+            'id': '123456',
+            '__class__': 'BaseModel',
+            'created_at': dt.isoformat(),
+            'updated_at': dt.isoformat()
+        }
+        self.assertDictEqual(bm.to_dict(), tdict)
+
+    def test_contrast_to_dict_dunder_dict(self):
+        bm = BaseModel()
+        self.assertNotEqual(bm.to_dict(), bm.__dict__)
+
+    def test_to_dict_with_arg(self):
+        bm = BaseModel()
+        with self.assertRaises(TypeError):
+            bm.to_dict(None)
 
 
 if __name__ == "__main__":
