@@ -49,7 +49,7 @@ class BaseModel:
         TIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%f"
 
         self.id = str(uuid4())
-        self.created_at = datetime.now()
+        self.created_at = datetime.today()
         self.updated_at = self.created_at
 
         if len(kwargs) != 0:
@@ -76,8 +76,8 @@ class BaseModel:
         updates the updated_at public instance variable
         """
 
+        self.updated_at = datetime.today()
         models.storage.save()
-        self.updated_at = datetime.now()
 
     def to_dict(self):
         """
