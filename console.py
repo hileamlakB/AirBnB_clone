@@ -22,7 +22,7 @@ class HBNBCommand(cmd.Cmd):
         program
     """
 
-    prompt = '(hbnb)'
+    prompt = '(hbnb) '
     __class_lst = {
         BaseModel.__name__: BaseModel,
         User.__name__: User,
@@ -314,5 +314,5 @@ class HBNBCommand(cmd.Cmd):
 
 if __name__ == "__main__":
     console = HBNBCommand()
-    Intro = "Message\n"
-    console.cmdloop(Intro)
+    #Intro = "Message\n"
+    console.cmdloop()
