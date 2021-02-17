@@ -61,7 +61,7 @@ class HBNBCommand(cmd.Cmd):
     def do_quit(self, arg):
         """Exits the program"""
 
-        quit()
+        return True
 
     def help_quit(self):
         """Prints help for the quit command"""
@@ -70,7 +70,8 @@ class HBNBCommand(cmd.Cmd):
     def do_EOF(self, arg):
         """Exits the program"""
 
-        quit()
+        print("")
+        return True
 
     def do_create(self, arg):
         """
