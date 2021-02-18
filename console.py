@@ -248,7 +248,7 @@ class HBNBCommand(cmd.Cmd):
         """
         pass
 
-    def count(self, arg):
+    def do_count(self, arg):
         """
             Prnits the number of elements inside the FileStorage that
             are of instances of cls
