@@ -154,7 +154,7 @@ class HBNBCommand(cmd.Cmd):
         elif "{}.{}".format(arg_lst[0], arg_lst[1]) not in db:
             print("** no instance found **")
         else:
-            #print(storage.__class__.__name__.__objects)
+            # print(storage.__class__.__name__.__objects)
             del db["{}.{}".format(arg_lst[0], arg_lst[1])]
             storage.save()
 
@@ -316,5 +316,4 @@ class HBNBCommand(cmd.Cmd):
 
 if __name__ == "__main__":
     console = HBNBCommand()
-    #Intro = "Message\n"
     console.cmdloop()
