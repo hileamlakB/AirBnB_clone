@@ -32,6 +32,7 @@ class HBNBCommand(cmd.Cmd):
         Amenity.__name__: Amenity,
         Review.__name__: Review
     }
+    __class_funcs = ["all", "count", "show", "destroy", "update"]
 
     @staticmethod
     def parse(arg, id=" "):
@@ -46,17 +47,6 @@ class HBNBCommand(cmd.Cmd):
             if x != '':
                 narg_list.append(x)
         return narg_list
-
-    def __init__(self):
-        super().__init__('tab')
-
-        self.__class_funcs = {
-            "all": self.do_all,
-            "count": self.count,
-            "show": self.show,
-            "destroy": self.destroy,
-            "update": self.update
-        }
 
     def do_quit(self, arg):
         """Exits the program"""
@@ -304,15 +294,16 @@ class HBNBCommand(cmd.Cmd):
 
         line_p = HBNBCommand.parse(line, '.')
         if line_p[0] in HBNBCommand.__class_lst.keys() and len(line_p) > 1:
-            if line_p[1][:-2] in self.__class_funcs.keys():
-                func = self.__class_funcs[line_p[1][:-2]]
+            if line_p[1][:-2] in HBNBCommand.__class_funcs:
+                func = line_p[1][:-2]
                 cls = HBNBCommand.__class_lst[line_p[0]]
-                func(cls.__name__)
+                eval("self.do_" + func)(cls.__name__)
             else:
                 print("** class doesn't exist **")
         else:
             super().default(line)
         return False
+
 
 if __name__ == "__main__":
     console = HBNBCommand()
